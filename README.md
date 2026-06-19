@@ -141,7 +141,7 @@ git clone git@github.com:your-username/legioni-team.git .legioni
 The Dockerfile pins `legioni` and `gh` via `ARG`. `opencode` is tracked via `package.json`.
 
 ```dockerfile
-ARG LEGIONI_VERSION=0.5.1
+ARG LEGIONI_VERSION=0.5.2
 ARG GH_VERSION=2.95.0
 ```
 
