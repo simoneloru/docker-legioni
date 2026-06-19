@@ -42,12 +42,10 @@ RUN mkdir -p /home/dev/.legioni /home/dev/.config/opencode/agents \
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-USER dev
-
-RUN git config --global user.name "Dev User" \
-    && git config --global user.email "dev@localhost" \
+RUN su dev -c "git config --global user.name 'Dev User' \
+    && git config --global user.email 'dev@localhost' \
     && git config --global core.autocrlf input \
-    && git config --global init.defaultBranch main
+    && git config --global init.defaultBranch main"
 
 WORKDIR /workspace
 

@@ -1,24 +1,30 @@
 #!/bin/bash
 set -e
 
+# Fix named volume ownership (Docker creates volumes as root)
+chown -R dev:dev /home/dev/.config 2>/dev/null || true
+
+# Create required directories
+mkdir -p /home/dev/.legioni/roles /home/dev/.legioni/lessons /home/dev/.config/opencode/agents
+
+# Set git config for dev user
 if [ -n "$GIT_USER_NAME" ]; then
-    git config --global user.name "$GIT_USER_NAME"
+    su dev -c "git config --global user.name '$GIT_USER_NAME'"
 fi
-
 if [ -n "$GIT_USER_EMAIL" ]; then
-    git config --global user.email "$GIT_USER_EMAIL"
+    su dev -c "git config --global user.email '$GIT_USER_EMAIL'"
 fi
 
-mkdir -p ~/.legioni/roles ~/.legioni/lessons ~/.config/opencode/agents
-
-if [ -z "$(ls -A ~/.config/opencode/agents 2>/dev/null)" ] \
-    && [ -n "$(ls -A ~/.legioni/roles 2>/dev/null)" ]; then
+# Auto legioni install on first run
+if [ -z "$(ls -A /home/dev/.config/opencode/agents 2>/dev/null)" ] \
+    && [ -n "$(ls -A /home/dev/.legioni/roles 2>/dev/null)" ]; then
     echo "First run: compiling agents..."
-    legioni install
+    su dev -c "legioni install"
 fi
 
+# Switch to dev user
 if [ $# -eq 0 ]; then
-    exec bash
+    exec su dev
 else
-    exec "$@"
+    exec su dev -c "exec $*"
 fi
