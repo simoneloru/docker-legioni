@@ -1,4 +1,4 @@
-FROM node:20-bookworm
+FROM node:26-bookworm
 
 ARG LEGIONI_VERSION=0.5.1
 ARG GH_VERSION=2.95.0
