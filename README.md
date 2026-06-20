@@ -122,6 +122,29 @@ gh auth login
 
 The token is saved in `~/.config/gh/` and persists across container restarts.
 
+## Git authentication for private repos
+
+Credentials are stored in `~/.config/.git-credentials` (inside the `dev-config` volume) and persist across restarts. You only authenticate once per host.
+
+**GitHub** — use `gh` (recommended):
+```bash
+gh auth login
+```
+
+**Bitbucket Cloud** — create an API token first:
+1. [Bitbucket settings → API tokens](https://bitbucket.org/account/settings/) → Create API token
+2. Permissions: `repository:read`, `repository:write`
+3. Then clone and enter your username + the API token (not your login password):
+```bash
+git clone https://bitbucket.org/your-workspace/your-repo.git
+```
+
+**Other hosts / manual** — the credential helper kicks in automatically:
+```bash
+git clone https://your-host.com/your-repo.git
+# enter username + password/token when prompted — saved automatically
+```
+
 ## Two-repo setup (recommended)
 
 1. **This repo** (public) — Dockerfile, compose, entrypoint
