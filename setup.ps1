@@ -7,7 +7,7 @@ $DefaultWorkspace = Join-Path $env:USERPROFILE "workspace"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Write-Host "================================================" -ForegroundColor Cyan
-Write-Host "  $Repo — setup" -ForegroundColor Cyan
+Write-Host "  $Repo -- setup" -ForegroundColor Cyan
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -54,12 +54,14 @@ else {
 }
 
 # Create .env
+$gitName = if ($env:GIT_USER_NAME) { $env:GIT_USER_NAME } else { "Dev User" }
+$gitEmail = if ($env:GIT_USER_EMAIL) { $env:GIT_USER_EMAIL } else { "dev@localhost" }
 $envContent = @"
-# Created by setup.ps1 — you can edit this file later
+# Created by setup.ps1 -- you can edit this file later
 WORKSPACE_PATH=$WorkspacePath
 DOCKER_IMAGE=simoneloru/docker-legioni:latest
-GIT_USER_NAME=${env:GIT_USER_NAME:-Dev User}
-GIT_USER_EMAIL=${env:GIT_USER_EMAIL:-dev@localhost}
+GIT_USER_NAME=$gitName
+GIT_USER_EMAIL=$gitEmail
 "@
 Set-Content -Path ".env" -Value $envContent
 Write-Host ".env created with WORKSPACE_PATH=$WorkspacePath" -ForegroundColor Green

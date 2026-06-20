@@ -21,7 +21,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/simoneloru/docker-legioni/mai
 
 **Windows PowerShell:**
 ```powershell
-curl.exe -sSL https://raw.githubusercontent.com/simoneloru/docker-legioni/main/setup.ps1 | powershell -c -
+powershell -NoProfile -ExecutionPolicy Bypass -Command "iwr -UseBasicParsing https://raw.githubusercontent.com/simoneloru/docker-legioni/main/setup.ps1 | iex"
 ```
 
 The script asks for your workspace path once, creates the minimal config, pulls the pre-built image, and prints the daily-use command.
