@@ -176,9 +176,17 @@ Check that `WORKSPACE_PATH` points to an existing directory. Docker may create i
 
 First launch: configure an AI provider. The settings save inside the `dev-config` volume.
 
-### Permission errors on `.legioni/`
+### Permission denied (EACCES) on `/workspace`
 
-Bind mounts from the host may show odd permissions inside the container, but read/write should work for the `dev` user.
+On some systems (especially Windows with Docker Desktop), files created by one container session may have restrictive permissions for the `dev` user. The container includes passwordless `sudo` — prefix the command with `sudo`:
+
+```bash
+sudo legioni init
+sudo rm -rf /workspace/my-project/.legioni    # clean up old scaffolding
+sudo touch /workspace/my-project/test.txt     # any write operation
+```
+
+New project directories created by the current `dev` user (UID 1001) should work without `sudo`.
 
 ## License
 
