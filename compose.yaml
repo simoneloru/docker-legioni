@@ -9,6 +9,7 @@ services:
       - ./.legioni:/home/dev/.legioni
       - dev-config:/home/dev/.config
     environment:
+      - XDG_DATA_HOME=/home/dev/.config
       - GIT_USER_NAME=${GIT_USER_NAME:-Dev User}
       - GIT_USER_EMAIL=${GIT_USER_EMAIL:-dev@localhost}
     stdin_open: true
