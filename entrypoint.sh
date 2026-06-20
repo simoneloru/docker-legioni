@@ -7,19 +7,6 @@ chown -R dev:dev /home/dev/.config 2>/dev/null || true
 # Create required directories
 mkdir -p /home/dev/.legioni/roles /home/dev/.legioni/lessons /home/dev/.config/opencode/agents
 
-# Symlink .gitconfig into the dev-config volume so changes persist
-if [ ! -L /home/dev/.gitconfig ]; then
-    if [ -f /home/dev/.config/gitconfig ]; then
-        # Volume has a saved gitconfig from a previous session
-        mv /home/dev/.gitconfig /home/dev/.gitconfig.bak 2>/dev/null || true
-    else
-        # First run: move the file baked in the image into the volume
-        mv /home/dev/.gitconfig /home/dev/.config/gitconfig 2>/dev/null || touch /home/dev/.config/gitconfig
-    fi
-    ln -sf /home/dev/.config/gitconfig /home/dev/.gitconfig
-    chown -h dev:dev /home/dev/.gitconfig
-fi
-
 # Set git config for dev user
 if [ -n "$GIT_USER_NAME" ]; then
     su dev -c "git config --global user.name '$GIT_USER_NAME'"

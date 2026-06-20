@@ -42,6 +42,8 @@ RUN mkdir -p /home/dev/.legioni /home/dev/.config/opencode/agents \
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+ENV GIT_CONFIG_GLOBAL=/home/dev/.config/.gitconfig
+
 RUN su dev -c "git config --global user.name 'Dev User' \
     && git config --global user.email 'dev@localhost' \
     && git config --global core.autocrlf input \
