@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
     gnupg \
+    sudo \
     python3 \
     python3-pip \
     python3-venv \
@@ -34,7 +35,9 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && apt-get update && apt-get install -y gh=${GH_VERSION} \
     && rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r dev && useradd -m -r -g dev -s /bin/bash dev
+RUN groupadd --gid 1001 dev && useradd --uid 1001 --gid 1001 -m -s /bin/bash dev \
+    && echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev \
+    && chmod 0440 /etc/sudoers.d/dev
 
 RUN mkdir -p /home/dev/.legioni /home/dev/.config/opencode/agents \
     && chown -R dev:dev /home/dev/.legioni /home/dev/.config

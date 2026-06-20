@@ -33,5 +33,5 @@ fi
 if [ $# -eq 0 ]; then
     exec su dev
 else
-    exec su dev -c "exec $*"
+    exec su dev -c "$*"
 fi
