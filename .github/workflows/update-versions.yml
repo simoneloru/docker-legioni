@@ -14,7 +14,7 @@ jobs:
       - name: Get latest gh release
         id: gh-latest
         run: |
-          v=$(curl -s https://api.github.com/repos/cli/cli/releases/latest | grep -oP '"tag_name": "v\K[^"]*')
+          v=$(curl -s https://api.github.com/repos/cli/cli/releases/latest | jq -r .tag_name | sed 's/^v//')
           echo "version=$v" >> $GITHUB_OUTPUT
 
       - name: Get current gh version
@@ -26,7 +26,7 @@ jobs:
       - name: Get latest legioni version from npm
         id: legioni-latest
         run: |
-          v=$(curl -s https://registry.npmjs.org/legioni | grep -oP '"version":"\K[^"]*' | head -1)
+          v=$(curl -s https://registry.npmjs.org/legioni | jq -r '.["dist-tags"].latest')
           echo "version=$v" >> $GITHUB_OUTPUT
 
       - name: Get current legioni version
