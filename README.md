@@ -10,28 +10,25 @@ Run [opencode](https://opencode.ai) and [legioni](https://github.com/simoneloru/
 
 **Prerequisites:** Docker with Compose support (e.g. [Docker Desktop](https://www.docker.com/products/docker-desktop/)).
 
-### Option A: Pull the pre-built image (fastest)
+### Option A: One-line setup (recommended)
 
-No clone, no build. Create a folder, grab two files, and go.
+No clone, no build, no file editing. Run the one-liner for your OS:
 
+**Linux / macOS:**
 ```bash
-mkdir docker-legioni && cd docker-legioni
-curl -O https://raw.githubusercontent.com/simoneloru/docker-legioni/main/compose.yaml
-curl -O https://raw.githubusercontent.com/simoneloru/docker-legioni/main/.env.example
-cp .env.example .env
+bash <(curl -sSL https://raw.githubusercontent.com/simoneloru/docker-legioni/main/setup.sh)
 ```
 
-Edit `.env` and set your workspace path:
-
-```env
-WORKSPACE_PATH=C:\Users\YourName\Documents
-DOCKER_IMAGE=simoneloru/docker-legioni:latest
+**Windows PowerShell:**
+```powershell
+curl.exe -sSL https://raw.githubusercontent.com/simoneloru/docker-legioni/main/setup.ps1 | powershell -c -
 ```
 
-Pull and run:
+The script asks for your workspace path once, creates the minimal config, pulls the pre-built image, and prints the daily-use command.
+
+After setup, every day you just run:
 
 ```bash
-docker compose pull
 docker compose run --rm dev
 ```
 
@@ -158,9 +155,9 @@ docker compose down -v       # stops AND deletes the volume
 
 ## Troubleshooting
 
-### "WORKSPACE_PATH is not set"
+### "/workspace is empty"
 
-You haven't created `.env` or `WORKSPACE_PATH` is empty.
+The container started but `/workspace` has no files. The compose uses a fallback (`~/workspace`) if `WORKSPACE_PATH` is not set — create `.env` and set it to your real projects folder.
 
 ### Container starts and exits immediately
 

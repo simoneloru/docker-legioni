@@ -5,7 +5,7 @@ services:
     container_name: opencode-dev
     hostname: opencode-dev
     volumes:
-      - ${WORKSPACE_PATH:?Set WORKSPACE_PATH in .env}:/workspace
+      - ${WORKSPACE_PATH:-~/workspace}:/workspace
       - ./.legioni:/home/dev/.legioni
       - dev-config:/home/dev/.config
     environment:

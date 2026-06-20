@@ -15,6 +15,12 @@ if [ -n "$GIT_USER_EMAIL" ]; then
     su dev -c "git config --global user.email '$GIT_USER_EMAIL'"
 fi
 
+# Warn if workspace is empty
+if [ ! -d "/workspace" ] || [ -z "$(ls -A /workspace 2>/dev/null)" ]; then
+    echo "⚠ /workspace is empty. Set WORKSPACE_PATH in .env to point to your projects."
+    echo "  Current fallback: ${WORKSPACE_PATH:-~/workspace}"
+fi
+
 # Auto legioni install on first run
 if [ -z "$(ls -A /home/dev/.config/opencode/agents 2>/dev/null)" ] \
     && [ -n "$(ls -A /home/dev/.legioni/roles 2>/dev/null)" ]; then
