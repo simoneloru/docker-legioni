@@ -15,6 +15,7 @@ fi
 if [ -n "$GIT_USER_EMAIL" ]; then
     su dev -c "git config --global user.email '$GIT_USER_EMAIL'"
 fi
+su dev -c "git config --global credential.helper store"
 
 # Warn if workspace is empty
 if [ ! -d "/workspace" ] || [ -z "$(ls -A /workspace 2>/dev/null)" ]; then
