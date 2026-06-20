@@ -6,6 +6,7 @@ chown -R dev:dev /home/dev/.config 2>/dev/null || true
 
 # Create required directories
 mkdir -p /home/dev/.legioni/roles /home/dev/.legioni/lessons /home/dev/.config/opencode/agents
+chown -R dev:dev /home/dev/.legioni 2>/dev/null || true
 
 # Set git config for dev user
 if [ -n "$GIT_USER_NAME" ]; then
