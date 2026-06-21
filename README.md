@@ -86,11 +86,11 @@ docker compose run --rm php    # + PHP 8, Composer
 | Service | Tag | Includes |
 |---|---|---|
 | `dev` | `slim` / `latest` | Node 20, Python 3, git, gh, opencode, legioni |
-| `go` | `go` | slim + Golang |
-| `java` | `java` | slim + OpenJDK 17, Maven |
-| `php` | `php` | slim + PHP 8, Composer |
+| `go` | `go` | slim + Go 1.26 |
+| `java` | `java` | slim + JDK 21 Temurin, Maven |
+| `php` | `php` | slim + PHP 8.3, Composer |
 
-> Need more? Extend the image: `compose.override.yaml` with `build: dockerfile: Dockerfile.custom` and `FROM simoneloru/docker-legioni:slim`.
+> Need a database? See [examples/](examples/) for MySQL (PHP) and PostgreSQL (Go, Java) overrides.
 
 ## Structure
 
