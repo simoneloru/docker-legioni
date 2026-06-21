@@ -1,4 +1,4 @@
-FROM node:20-slim
+FROM node:20-slim AS base
 
 ARG LEGIONI_VERSION=0.5.5
 ARG GH_VERSION=2.95.0
@@ -55,3 +55,18 @@ RUN su dev -c "git config --global user.name 'Dev User' \
 WORKDIR /workspace
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+FROM base AS slim
+
+FROM base AS go
+RUN apt-get update && apt-get install -y golang \
+    && rm -rf /var/lib/apt/lists/*
+
+FROM base AS java
+RUN apt-get update && apt-get install -y openjdk-17-jdk maven \
+    && rm -rf /var/lib/apt/lists/*
+
+FROM base AS php
+RUN apt-get update && apt-get install -y php-cli php-mbstring php-xml php-curl php-zip \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && rm -rf /var/lib/apt/lists/*
