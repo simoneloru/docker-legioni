@@ -59,14 +59,25 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 FROM base AS slim
 
 FROM base AS go
-RUN apt-get update && apt-get install -y golang \
-    && rm -rf /var/lib/apt/lists/*
+ARG GO_VERSION=1.26.3
+RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o /tmp/go.tar.gz \
+    && tar -C /usr/local -xzf /tmp/go.tar.gz \
+    && rm /tmp/go.tar.gz
+ENV PATH="/usr/local/go/bin:${PATH}"
 
 FROM base AS java
-RUN apt-get update && apt-get install -y openjdk-17-jdk maven \
+ARG JAVA_VERSION=21
+RUN apt-get update && apt-get install -y maven \
+    && wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor -o /usr/share/keyrings/adoptium.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/adoptium.gpg] https://packages.adoptium.net/artifactory/deb bookworm main" > /etc/apt/sources.list.d/adoptium.list \
+    && apt-get update && apt-get install -y temurin-${JAVA_VERSION}-jdk \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS php
-RUN apt-get update && apt-get install -y php-cli php-mbstring php-xml php-curl php-zip \
+ARG PHP_VERSION=8.3
+RUN apt-get update && apt-get install -y lsb-release curl \
+    && curl -sSLo /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
+    && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list \
+    && apt-get update && apt-get install -y php${PHP_VERSION}-cli php${PHP_VERSION}-mbstring php${PHP_VERSION}-xml php${PHP_VERSION}-curl php${PHP_VERSION}-zip \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /var/lib/apt/lists/*
