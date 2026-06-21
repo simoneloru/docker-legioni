@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      WORKSPACE_PATH: /tmp/workspace
-      DOCKER_IMAGE: simoneloru/docker-legioni:latest
+    strategy:
+      matrix:
+        variant: [slim, go, java, php]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,11 +26,37 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build image
+      - name: Build and push
         run: |
-          mkdir -p /tmp/workspace
-          docker compose build
+          IMAGE="simoneloru/docker-legioni:${{ matrix.variant }}"
+          docker build --target ${{ matrix.variant }} -t $IMAGE .
+          if [ "${{ github.event_name }}" = "push" ]; then
+            docker push $IMAGE
+          fi
 
-      - name: Push to Docker Hub
-        if: github.event_name == 'push'
-        run: docker push $DOCKER_IMAGE
+      - name: Tag slim as latest
+        if: github.event_name == 'push' && matrix.variant == 'slim'
+        run: |
+          docker tag simoneloru/docker-legioni:slim simoneloru/docker-legioni:latest
+          docker push simoneloru/docker-legioni:latest
+
+  verify:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    container:
+      image: simoneloru/docker-legioni:slim
+    steps:
+      - name: Check tools
+        run: |
+          echo "=== Tool versions ==="
+          node --version
+          python3 --version
+          git --version
+          gh --version
+          opencode --version
+          legioni --version
+          echo "=== User ==="
+          sudo whoami || true
+          id
+          echo "=== All OK ==="

@@ -1,19 +1,43 @@
+x-dev: &dev
+  volumes:
+    - ${WORKSPACE_PATH:-~/workspace}:/workspace
+    - ./.legioni:/home/dev/.legioni
+    - dev-config:/home/dev/.config
+  environment:
+    XDG_DATA_HOME: /home/dev/.config
+    GIT_USER_NAME: ${GIT_USER_NAME:-Dev User}
+    GIT_USER_EMAIL: ${GIT_USER_EMAIL:-dev@localhost}
+  stdin_open: true
+  tty: true
+
 services:
   dev:
-    build: .
-    image: ${DOCKER_IMAGE:-docker-legioni:latest}
-    container_name: opencode-dev
-    hostname: opencode-dev
-    volumes:
-      - ${WORKSPACE_PATH:-~/workspace}:/workspace
-      - ./.legioni:/home/dev/.legioni
-      - dev-config:/home/dev/.config
-    environment:
-      - XDG_DATA_HOME=/home/dev/.config
-      - GIT_USER_NAME=${GIT_USER_NAME:-Dev User}
-      - GIT_USER_EMAIL=${GIT_USER_EMAIL:-dev@localhost}
-    stdin_open: true
-    tty: true
+    build:
+      context: .
+      target: slim
+    image: ${DOCKER_IMAGE:-simoneloru/docker-legioni:slim}
+    <<: *dev
+
+  go:
+    build:
+      context: .
+      target: go
+    image: simoneloru/docker-legioni:go
+    <<: *dev
+
+  java:
+    build:
+      context: .
+      target: java
+    image: simoneloru/docker-legioni:java
+    <<: *dev
+
+  php:
+    build:
+      context: .
+      target: php
+    image: simoneloru/docker-legioni:php
+    <<: *dev
 
 volumes:
   dev-config:

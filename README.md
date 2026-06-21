@@ -29,7 +29,7 @@ The script asks for your workspace path once, creates the minimal config, pulls 
 After setup, every day you just run:
 
 ```bash
-docker compose run --rm dev
+docker compose run --rm dev    # or: go, java, php
 ```
 
 ### Option B: Clone and build locally
@@ -71,6 +71,26 @@ opencode
 ```
 
 The first time you run `opencode`, it prompts you to configure an AI provider. The configuration persists in the `dev-config` volume.
+
+## Available toolchains
+
+All services share the same volumes (workspace, config, credentials). Pick the one that matches your stack:
+
+```bash
+docker compose run --rm dev    # Node + Python   (default)
+docker compose run --rm go     # + Golang
+docker compose run --rm java   # + JDK 17, Maven
+docker compose run --rm php    # + PHP 8, Composer
+```
+
+| Service | Tag | Includes |
+|---|---|---|
+| `dev` | `slim` / `latest` | Node 20, Python 3, git, gh, opencode, legioni |
+| `go` | `go` | slim + Golang |
+| `java` | `java` | slim + OpenJDK 17, Maven |
+| `php` | `php` | slim + PHP 8, Composer |
+
+> Need more? Extend the image: `compose.override.yaml` with `build: dockerfile: Dockerfile.custom` and `FROM simoneloru/docker-legioni:slim`.
 
 ## Structure
 
