@@ -72,6 +72,11 @@ opencode
 
 The first time you run `opencode`, it prompts you to configure an AI provider. The configuration persists in the `dev-config` volume.
 
+> **Tip: second terminal.** Keep your `opencode` session running and open another terminal into the same container:
+> ```bash
+> docker compose exec <service> bash     # e.g. docker compose exec go bash
+> ```
+
 ## Available toolchains
 
 All services share the same volumes (workspace, config, credentials). Pick the one that matches your stack:
