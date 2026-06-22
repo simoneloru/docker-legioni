@@ -74,7 +74,7 @@ The first time you run `opencode`, it prompts you to configure an AI provider. T
 
 > **Tip: second terminal.** Keep your `opencode` session running and open another terminal into the same container:
 > ```bash
-> docker compose exec <service> bash     # e.g. docker compose exec go bash
+> docker exec -it $(docker ps -q -f name=go) bash   # or: dev, java, php
 > ```
 
 ## Available stacks
