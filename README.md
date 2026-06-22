@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/docker-simoneloru%2Fdocker--legioni-blue)](https://hub.docker.com/r/simoneloru/docker-legioni)
 
-Run [opencode](https://opencode.ai) and [legioni](https://github.com/simoneloru/legioni) in a Docker container with full toolchain support, while keeping your projects on your host filesystem.
+Run [opencode](https://opencode.ai) and [legioni](https://github.com/simoneloru/legioni) in a Docker container with the stack you need, while keeping your projects on your host filesystem.
 
 ## Quick start
 
@@ -77,14 +77,14 @@ The first time you run `opencode`, it prompts you to configure an AI provider. T
 > docker compose exec <service> bash     # e.g. docker compose exec go bash
 > ```
 
-## Available toolchains
+## Available stacks
 
 All services share the same volumes (workspace, config, credentials). Pick the one that matches your stack:
 
 ```bash
 docker compose run --rm dev    # Node + Python   (default)
 docker compose run --rm go     # + Golang
-docker compose run --rm java   # + JDK 17, Maven
+docker compose run --rm java   # + JDK 21, Maven
 docker compose run --rm php    # + PHP 8, Composer
 ```
 
@@ -137,19 +137,9 @@ GIT_USER_NAME=Your Name
 GIT_USER_EMAIL=you@example.com
 ```
 
-## GitHub CLI
-
-`gh` is pre-installed. Authenticate once:
-
-```bash
-gh auth login
-```
-
-The token is saved in `~/.config/gh/` and persists across container restarts.
-
 ## Git authentication for private repos
 
-Credentials are stored in `~/.config/.git-credentials` (inside the `dev-config` volume) and persist across restarts. You only authenticate once per host.
+`gh` is pre-installed and authentication persists inside the `dev-config` volume. You only authenticate once per host.
 
 **GitHub** — use `gh` (recommended):
 ```bash
@@ -203,22 +193,18 @@ docker compose down -v       # stops AND deletes the volume
 
 ## Troubleshooting
 
-### "/workspace is empty"
+### "/workspace is empty" or no files
 
-The container started but `/workspace` has no files. The compose uses a fallback (`~/workspace`) if `WORKSPACE_PATH` is not set — create `.env` and set it to your real projects folder.
+The compose uses a fallback (`~/workspace`) if `WORKSPACE_PATH` is not set. Create `.env` and point `WORKSPACE_PATH` to your real projects folder. Make sure the directory exists — Docker may create an empty one if the path doesn't exist, which can be confusing.
 
 ### Container starts and exits immediately
 
-Run `docker logs opencode-dev`. Common causes: missing `.env`, invalid `WORKSPACE_PATH`, or `entrypoint.sh` with CRLF line endings. If line endings are the issue, run:
+Run `docker compose logs dev`. Common causes: missing `.env`, invalid `WORKSPACE_PATH`, or `entrypoint.sh` with CRLF line endings. If line endings are the issue, run:
 
 ```bash
 git add --renormalize .
 git commit -m "fix line endings"
 ```
-
-### No files in `/workspace`
-
-Check that `WORKSPACE_PATH` points to an existing directory. Docker may create it if it doesn't exist, which can be confusing.
 
 ### opencode says "no provider configured"
 
