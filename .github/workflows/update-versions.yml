@@ -44,7 +44,7 @@ jobs:
           changed=false
           [ "$GH_LATEST" != "$GH_CUR" ] && sed -i "s/ARG GH_VERSION=${GH_CUR}/ARG GH_VERSION=${GH_LATEST}/" Dockerfile && changed=true
           [ "$LG_LATEST" != "$LG_CUR" ] && sed -i "s/ARG LEGIONI_VERSION=${LG_CUR}/ARG LEGIONI_VERSION=${LG_LATEST}/" Dockerfile && changed=true
-          [ "$changed" = true ] && echo "NEW_VERSION=true" >> $GITHUB_ENV
+          [ "$changed" = true ] && echo "NEW_VERSION=true" >> $GITHUB_ENV || true
         env:
           GH_LATEST: ${{ steps.gh-latest.outputs.version }}
           GH_CUR: ${{ steps.gh-current.outputs.version }}
