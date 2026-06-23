@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        variant: [slim, go, java, php]
+        variant: [dev, go, java, php]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,10 +32,10 @@ jobs:
             docker push $IMAGE
           fi
 
-      - name: Tag slim as latest
-        if: github.event_name == 'push' && matrix.variant == 'slim'
+      - name: Tag dev as latest
+        if: github.event_name == 'push' && matrix.variant == 'dev'
         run: |
-          docker tag simoneloru/docker-legioni:slim simoneloru/docker-legioni:latest
+          docker tag simoneloru/docker-legioni:dev simoneloru/docker-legioni:latest
           docker push simoneloru/docker-legioni:latest
 
   verify:
@@ -43,7 +43,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     container:
-      image: simoneloru/docker-legioni:slim
+      image: simoneloru/docker-legioni:dev
     steps:
       - name: Check tools
         run: |
