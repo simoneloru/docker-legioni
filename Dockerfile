@@ -56,7 +56,7 @@ WORKDIR /workspace
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-FROM base AS slim
+FROM base AS dev
 
 FROM base AS go
 ARG GO_VERSION=1.26.3

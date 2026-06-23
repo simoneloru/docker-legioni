@@ -14,8 +14,8 @@ services:
   dev:
     build:
       context: .
-      target: slim
-    image: ${DOCKER_IMAGE:-simoneloru/docker-legioni:slim}
+      target: dev
+    image: ${DOCKER_IMAGE:-simoneloru/docker-legioni:dev}
     <<: *dev
 
   go:

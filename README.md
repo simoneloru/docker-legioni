@@ -74,7 +74,7 @@ The first time you run `opencode`, it prompts you to configure an AI provider. T
 
 > **Tip: second terminal.** Keep your `opencode` session running and open another terminal into the same container:
 > ```bash
-> docker exec -it $(docker ps -q -f name=go) bash   # or: dev, java, php
+> docker exec -it --user dev $(docker ps -q -f name=dev) bash
 > ```
 
 ## Available stacks
@@ -90,10 +90,10 @@ docker compose run --rm php    # + PHP 8, Composer
 
 | Service | Tag | Includes |
 |---|---|---|
-| `dev` | `slim` / `latest` | Node 20, Python 3, git, gh, opencode, legioni |
-| `go` | `go` | slim + Go 1.26 |
-| `java` | `java` | slim + JDK 21 Temurin, Maven |
-| `php` | `php` | slim + PHP 8.3, Composer |
+| `dev` | `dev` / `latest` | Node 20, Python 3, git, gh, opencode, legioni |
+| `go` | `go` | dev + Go 1.26 |
+| `java` | `java` | dev + JDK 21 Temurin, Maven |
+| `php` | `php` | dev + PHP 8.3, Composer |
 
 > Need a database? See [examples/](examples/) for MySQL (PHP) and PostgreSQL (Go, Java) overrides.
 
