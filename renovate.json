@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update ARG LEGIONI_VERSION in Dockerfile",
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["ARG LEGIONI_VERSION=(?<currentValue>\\S+)"],
+      "depNameTemplate": "legioni",
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "Update ARG GH_VERSION in Dockerfile",
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["ARG GH_VERSION=(?<currentValue>\\S+)"],
+      "packageNameTemplate": "cli/cli",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "Update ARG GO_VERSION in Dockerfile",
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["ARG GO_VERSION=(?<currentValue>\\S+)"],
+      "packageNameTemplate": "golang/go",
+      "datasourceTemplate": "github-releases"
+    }
+  ]
+}
