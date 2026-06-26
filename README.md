@@ -106,7 +106,7 @@ docker-legioni/
 ├── entrypoint.sh            # auto legioni install on first run
 ├── .env.example             # template for your local .env
 ├── .gitignore               # excludes .legioni/ and .env
-├── package.json             # tracks opencode-ai version for Dependabot
+├── package.json             # tracks opencode-ai version for Renovate
 ├── setup.ps1 / setup.sh     # setup helpers
 └── .legioni/                # your team store (bind mount, not committed here)
     ├── roles/               # role definitions
@@ -181,8 +181,8 @@ ARG GH_VERSION=2.95.0
 ```
 
 Version updates are automated:
-- **Dependabot** watches `package.json` → opens PRs for `opencode-ai`
-- **Weekly workflow** checks npm and GitHub → opens PRs for `legioni` and `gh`
+- **Renovate** watches `package.json` → opens PRs for `opencode-ai`
+- **Renovate** checks npm and GitHub → opens PRs for `legioni` and `gh`
 
 ## Stop
 
