@@ -25,10 +25,23 @@ docker compose -f compose.yaml -f examples/php-mysql/override.yaml up -d db
 docker compose -f compose.yaml -f examples/php-mysql/override.yaml run --rm php
 ```
 
+Example for Laravel (PHP + MySQL with Vite ports):
+
+```bash
+docker compose -f compose.yaml -f examples/laravel/override.yaml up -d db
+docker compose -f compose.yaml -f examples/laravel/override.yaml run --service-ports --rm php
+```
+
+`--service-ports` publishes the ports defined in the override (8000 for artisan serve, 5173 for Vite).
+
 Inside the container, connect to the database using hostname `db`:
 
 ```php
+// php-mysql: root access
 $pdo = new PDO('mysql:host=db;dbname=app', 'root', 'dev');
+
+// laravel: user access
+$pdo = new PDO('mysql:host=db;dbname=app', 'dev', 'dev');
 ```
 
 ```go
@@ -44,6 +57,7 @@ db, _ := sql.Open("pgx", "postgres://dev:dev@db:5432/app")
 
 | Example | Service | Database |
 |---|---|---|
+| `laravel` | `php` | MySQL 8 |
 | `php-mysql` | `php` | MySQL 8 |
 | `go-postgres` | `go` | PostgreSQL 16 |
 | `java-postgres` | `java` | PostgreSQL 16 |

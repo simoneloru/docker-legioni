@@ -1,0 +1,21 @@
+services:
+  php:
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+
+  db:
+    image: mysql:8
+    container_name: dev-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: dev
+      MYSQL_DATABASE: app
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
