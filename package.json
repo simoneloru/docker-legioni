@@ -2,6 +2,6 @@
   "private": true,
   "description": "Tracks opencode-ai version for Dependabot",
   "devDependencies": {
-    "opencode-ai": "1.17.8"
+    "opencode-ai": "1.17.18"
   }
 }
