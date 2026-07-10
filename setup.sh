@@ -44,6 +44,9 @@ if [ "$LOCAL" = true ]; then
 else
     echo "Downloading compose.yaml..."
     curl -fsSL -o compose.yaml "$GITHUB_RAW/compose.yaml"
+    echo "Downloading .devcontainer/devcontainer.json..."
+    mkdir -p .devcontainer
+    curl -fsSL -o .devcontainer/devcontainer.json "$GITHUB_RAW/.devcontainer/devcontainer.json"
 fi
 
 # --- create .env ---

@@ -32,7 +32,11 @@ fi
 
 # Switch to dev user
 if [ $# -eq 0 ]; then
-    exec su dev
+    if [ -t 0 ]; then
+        exec su dev
+    else
+        exec sleep infinity
+    fi
 else
     exec su dev -c "$*"
 fi

@@ -1,0 +1,13 @@
+{
+  "name": "docker-legioni",
+  "dockerComposeFile": "../compose.yaml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "dev",
+  "postCreateCommand": "legioni install",
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  }
+}

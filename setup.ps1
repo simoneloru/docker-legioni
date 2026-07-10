@@ -51,6 +51,9 @@ if ($Local) {
 else {
     Write-Host "Downloading compose.yaml..." -ForegroundColor Green
     Invoke-WebRequest -Uri "$GitHubRaw/compose.yaml" -OutFile "compose.yaml"
+    Write-Host "Downloading .devcontainer/devcontainer.json..." -ForegroundColor Green
+    New-Item -ItemType Directory -Path ".devcontainer" -Force | Out-Null
+    Invoke-WebRequest -Uri "$GitHubRaw/.devcontainer/devcontainer.json" -OutFile ".devcontainer/devcontainer.json"
 }
 
 # Create .env

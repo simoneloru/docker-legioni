@@ -77,6 +77,14 @@ The first time you run `opencode`, it prompts you to configure an AI provider. T
 > docker exec -it --user dev $(docker ps -q -f name=dev) bash
 > ```
 
+## VS Code / Dev Containers
+
+Open the `docker-legioni` folder in VS Code. When prompted "Reopen in Container", click yes. Or press `Ctrl+Shift+P` and run `Dev Containers: Reopen in Container`.
+
+To change the stack, edit `service` in `.devcontainer/devcontainer.json` (`dev`, `go`, `java`, or `php`) and reopen.
+
+Also works with [GitHub Codespaces](https://github.com/features/codespaces): open the repo on GitHub, click `Code → Codespaces → Create codespace on main`.
+
 ## Available stacks
 
 All services share the same volumes (workspace, config, credentials). Pick the one that matches your stack:
