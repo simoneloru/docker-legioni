@@ -1,4 +1,4 @@
-FROM node:20-slim AS base
+FROM node:26-slim AS base
 
 ARG LEGIONI_VERSION=0.5.9
 ARG GH_VERSION=2.96.0
