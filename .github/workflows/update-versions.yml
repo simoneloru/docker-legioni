@@ -1,0 +1,66 @@
+name: Update pinned versions
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get latest gh release
+        id: gh-latest
+        run: |
+          v=$(curl -s https://api.github.com/repos/cli/cli/releases/latest | jq -r .tag_name | sed 's/^v//')
+          echo "version=$v" >> $GITHUB_OUTPUT
+
+      - name: Get current gh version
+        id: gh-current
+        run: |
+          v=$(grep -oP 'ARG GH_VERSION=\K[^ ]+' Dockerfile)
+          echo "version=$v" >> $GITHUB_OUTPUT
+
+      - name: Get latest legioni version from npm
+        id: legioni-latest
+        run: |
+          v=$(curl -s https://registry.npmjs.org/legioni | jq -r '.["dist-tags"].latest')
+          echo "version=$v" >> $GITHUB_OUTPUT
+
+      - name: Get current legioni version
+        id: legioni-current
+        run: |
+          v=$(grep -oP 'ARG LEGIONI_VERSION=\K[^ ]+' Dockerfile)
+          echo "version=$v" >> $GITHUB_OUTPUT
+
+      - name: Update Dockerfile if any version changed
+        run: |
+          changed=false
+          [ "$GH_LATEST" != "$GH_CUR" ] && sed -i "s/ARG GH_VERSION=${GH_CUR}/ARG GH_VERSION=${GH_LATEST}/" Dockerfile && changed=true
+          [ "$LG_LATEST" != "$LG_CUR" ] && sed -i "s/ARG LEGIONI_VERSION=${LG_CUR}/ARG LEGIONI_VERSION=${LG_LATEST}/" Dockerfile && changed=true
+          [ "$changed" = true ] && echo "NEW_VERSION=true" >> $GITHUB_ENV || true
+        env:
+          GH_LATEST: ${{ steps.gh-latest.outputs.version }}
+          GH_CUR: ${{ steps.gh-current.outputs.version }}
+          LG_LATEST: ${{ steps.legioni-latest.outputs.version }}
+          LG_CUR: ${{ steps.legioni-current.outputs.version }}
+
+      - name: Create Pull Request
+        if: env.NEW_VERSION == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update pinned versions"
+          title: "Update pinned versions"
+          body: |
+            Automated update.
+            ${{ steps.gh-current.outputs.version != steps.gh-latest.outputs.version && format('- gh: {0} → {1}', steps.gh-current.outputs.version, steps.gh-latest.outputs.version) || '' }}
+            ${{ steps.legioni-current.outputs.version != steps.legioni-latest.outputs.version && format('- legioni: {0} → {1}', steps.legioni-current.outputs.version, steps.legioni-latest.outputs.version) || '' }}
+          branch: update-versions
+          base: main

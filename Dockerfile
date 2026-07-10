@@ -1,7 +1,7 @@
 FROM node:20-slim AS base
 
 ARG LEGIONI_VERSION=0.5.9
-ARG GH_VERSION=2.95.0
+ARG GH_VERSION=2.96.0
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -32,7 +32,7 @@ RUN OPENCODE_VER=$(node -p "require('/tmp/build-package.json').devDependencies['
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-    && apt-get update && apt-get install -y gh \
+    && apt-get update && apt-get install -y gh=${GH_VERSION} \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --gid 1001 dev && useradd --uid 1001 --gid 1001 -m -s /bin/bash dev \
