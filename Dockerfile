@@ -1,7 +1,7 @@
 FROM node:26-slim AS base
 
 ARG LEGIONI_VERSION=0.6.0
-ARG GH_VERSION=2.96.0
+ARG GH_VERSION=2.101.0
 
 RUN apt-get update && apt-get install -y \
     git \
